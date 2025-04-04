@@ -53,6 +53,9 @@
             <p>Justina! It's been an amazing almost 4 years, so let's take a trip down memory lane.</p>
             <br />
             <small>Use the arrow keys to navigate →</small>
+            <div id="loading-bar-container" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; background: rgba(255,255,255,0.2); border-radius: 10px; height: 10px;">
+                <div id="loading-bar" style="width: 0%; height: 100%; background: rgba(255,255,255,0.8); border-radius: 10px; transition: width 0.3s ease;"></div>
+            </div>
         </div>
 
 
@@ -652,6 +655,48 @@
                 }
             }
         })();
+    </script>
+
+    <script>
+        // Track loading progress of all media
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingBar = document.getElementById('loading-bar');
+            const loadingBarContainer = document.getElementById('loading-bar-container');
+            
+            // Only count non-lazy-loaded media elements
+            const mediaElements = Array.from(document.querySelectorAll('img, video')).filter(element => {
+                return !element.hasAttribute('loading') || element.getAttribute('loading') !== 'lazy';
+            });
+            
+            let loadedCount = 0;
+            const totalMedia = mediaElements.length;
+
+            function updateLoadingProgress() {
+                loadedCount++;
+                const progress = (loadedCount / totalMedia) * 100;
+                loadingBar.style.width = `${progress}%`;
+
+                if (loadedCount === totalMedia) {
+                    setTimeout(() => {
+                        loadingBarContainer.style.display = 'none';
+                    }, 500);
+                }
+            }
+
+            mediaElements.forEach(element => {
+                if (element.complete) {
+                    updateLoadingProgress();
+                } else {
+                    element.addEventListener('load', updateLoadingProgress);
+                    element.addEventListener('error', updateLoadingProgress); // Handle failed loads
+                }
+            });
+
+            // If there are no non-lazy-loaded elements, hide the loading bar immediately
+            if (totalMedia === 0) {
+                loadingBarContainer.style.display = 'none';
+            }
+        });
     </script>
 
     <!--
