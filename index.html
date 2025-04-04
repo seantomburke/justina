@@ -567,10 +567,21 @@
             const image = (e.target).querySelector('img');
 
             if (video != null) {
+                // Remove lazy loading attribute when this step is entered
+                if (video.hasAttribute('loading')) {
+                    video.removeAttribute('loading');
+                }
+                
                 if (image != null) {
                     image.classList.add('hidden');
                     video.classList.remove('hidden');
+                    
+                    // Also remove lazy loading from image
+                    if (image.hasAttribute('loading')) {
+                        image.removeAttribute('loading');
+                    }
                 }
+                
                 // Ensure video plays and handle any autoplay restrictions
                 video.muted = true; // Mute to help with autoplay policies
                 var playPromise = video.play();
@@ -630,6 +641,7 @@
                     video.setAttribute("src", `justina/photos/${folderName}/${videoName}.MP4`);
                     video.setAttribute("height", height);
                     video.setAttribute("class", "video");
+                    video.setAttribute("loading", "lazy");
                     video.addEventListener('ended', function (e) {
                         if (image != null) {
                             image.classList.remove('hidden');
