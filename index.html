@@ -48,7 +48,7 @@
 
     <div id="impress" data-transition-duration="500">
 
-        <div id="step0" class="step" data-x="-6000" data-y="0" data-z="6000" data-height="1000" data-rotate-y="0"
+        <div id="step0" class="step" data-x="-18000" data-y="0" data-z="6000" data-height="1000" data-rotate-y="0"
             data-scale="10" data-rotate-z="0">
             <p>Justina! It's been an amazing almost 4 years, so let's take a trip down memory lane.</p>
             <br />
@@ -460,7 +460,7 @@
     <div id="audio-controls" style="position: fixed; top: 10px; left: 10px; z-index: 9999; background-color: rgba(0,0,0,0.7); padding: 5px; border-radius: 5px; display: flex; align-items: center; pointer-events: auto;  background-color: #0002">
         <button id="play-pause-btn" style="margin-right: 10px; padding: 1px 3px; cursor: pointer; background: transparent; border: none;">▶️</button>
         <button id="mute-btn" style="margin-right: 10px; padding: 1px 3px; cursor: pointer; background: transparent; border: none;">🔊</button>
-        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.25" style="cursor: pointer;">
+        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.25" style="cursor: pointer; accent-color: rgba(128, 128, 128, 0.5);">
         <audio autoplay loop id="audio" preload="auto">
             <source src="justina/house-i-used-to-call-home.mp3" type="audio/mp3" />
         </audio>
@@ -617,6 +617,7 @@
                     image.setAttribute("src", `justina/photos/${folderName}/${videoName ? videoName : imageName}.jpeg`);
                     image.setAttribute("class", videoName ? "hidden" : "img");
                     image.setAttribute("height", height);
+                    image.setAttribute("loading", "lazy");
                     div.appendChild(image);
                 }
 
