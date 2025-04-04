@@ -38,9 +38,47 @@
 
     <link href="justina/justina.css" rel="stylesheet" />
 
+    <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+
 </head>
 
 <body class="impress-not-supported">
+
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
 
     <div class="fallback-message">
         <p>Don't look yet it's loading!!!!</p>
@@ -670,6 +708,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const loadingBar = document.getElementById('loading-bar');
             const loadingBarContainer = document.getElementById('loading-bar-container');
+            const loadingOverlay = document.querySelector('.loading-overlay');
             
             // Only count non-lazy-loaded media elements
             const mediaElements = Array.from(document.querySelectorAll('img, video')).filter(element => {
@@ -687,6 +726,11 @@
                 if (loadedCount === totalMedia) {
                     setTimeout(() => {
                         loadingBarContainer.style.display = 'none';
+                        loadingOverlay.classList.add('hidden');
+                        // Remove the overlay from DOM after transition
+                        setTimeout(() => {
+                            loadingOverlay.remove();
+                        }, 500);
                     }, 500);
                 }
             }
@@ -700,9 +744,13 @@
                 }
             });
 
-            // If there are no non-lazy-loaded elements, hide the loading bar immediately
+            // If there are no non-lazy-loaded elements, hide the loading bar and overlay immediately
             if (totalMedia === 0) {
                 loadingBarContainer.style.display = 'none';
+                loadingOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    loadingOverlay.remove();
+                }, 500);
             }
         });
     </script>
